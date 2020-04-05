@@ -229,20 +229,84 @@ summary {
 
 
 <!-- rnb-text-begin -->
+<div id="front-matter" class="section level2">
+<h2>Front Matter</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjbGVhbiB1cCB0aGUgUlN0dWRpbyBlbnZpcm9ubWVudCBcbnJtKGxpc3QgPSBscygpKVxuIyBsb2FkIGFsbCBwYWNrYWdlcyBoZXJlOiBgbW9zYWljYCwgYHRpZHl2ZXJzZWAsIGBsdWJyaWRhdGVgLCBhbmQgYWxsIG90aGVycyB1c2VkXG5saWJyYXJ5KG1vc2FpYylcbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShsdWJyaWRhdGUpXG5saWJyYXJ5KGdncGxvdDIpXG5saWJyYXJ5KERhdGFDb21wdXRpbmcpXG5gYGAifQ== -->
+<pre class="r"><code># clean up the RStudio environment 
+rm(list = ls())
+# load all packages here: `mosaic`, `tidyverse`, `lubridate`, and all others used
+library(mosaic)
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(DataComputing)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <ul>
-<li><p>Guiding Question : What is the correlation between daily death and recover in the U.S. ?</p></li>
-<li><p>Data sources: We found COVID-19 data source from kaggle. The data is collected by World Health Organization. Since it is a new respiratory virus that people do not know how it affects people, the data is collected and made available to the broader data science community in order to gather some interesting insights. The data started from 1/22/2020, and currently have 11930 cases that represent the number of Covid 2019 patient in each state daily. We plan to use “Date”,“State”,“Country”,“Confirmed”,“Deaths”,and “Recovered” from this data frame.</p></li>
-</ul>
-<p>We found COVID-19 in USA data source from kaggle as well. The data is obtained from COVID-19 Tracking project. The data focus mainly on the U.S. and provides details regarding 50 states and the District of Columbia at daily level. Each case represents the number of COVID 2019 patients in each state in the US daily. The data started from 3/4/2020 and currently have 1821 cases. We plan to use “Date”,“state”,“Positive”,“total”,and “deathIncrease”.</p>
-<p>We also found ZipGeography data from DataComputing package. It has 42741 cases and each case represents Information about the location, area, and housing units in each ZIP code area. We plan to use some vraibles such as “State”,“Population”, and “County”.</p>
-<ul>
-<li>Two data sources</li>
+<li><p>Guiding Question : What is the correlation between daily death and recover in different states of the U.S. ?</p></li>
+<li><p>Data sources: We found COVID-19 data source from kaggle. The data is collected by World Health Organization. Since it is a new respiratory virus that people do not know how it affects people, the data is collected and made available to the broader data science community in order to gather some interesting insights. The data started from 1/22/2020, and currently have 11930 cases that represent the number of Covid 2019 patient in each state daily. We plan to use “Date”,“State”,“Country”,“Confirmed”,“Deaths”,and “Recovered” from this data frame. We found COVID-19 in USA data source from kaggle as well. The data is obtained from COVID-19 Tracking project. The data focus mainly on the U.S. and provides details regarding 50 states and the District of Columbia at daily level. Each case represents the number of COVID 2019 patients in each state in the US daily. The data started from 3/4/2020 and currently have 1821 cases. We plan to use “Date”,“state”,“Positive”,“total”,and “deathIncrease”. We also found ZipGeography data from DataComputing package. It has 42741 cases and each case represents Information about the location, area, and housing units in each ZIP code area. We plan to use some vraibles such as “State”,“Population”, and “County”.</p></li>
+<li><p>Two data sources</p></li>
 </ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY292aWQgPC1cbiAgcmVhZC5jc3YoJ2NvdmlkXzE5X2RhdGEuY3N2JylcbmNvdmlkVVMgPC1cbiAgY292aWQgJT4lXG4gIGZpbHRlcihDb3VudHJ5LlJlZ2lvbiA9PSBcIlVTXCIpXG5jb3ZpZFVTXG5gYGAifQ== -->
+<pre class="r"><code>covid &lt;-
+  read.csv('covid_19_data.csv')
+covidUS &lt;-
+  covid %&gt;%
+  filter(Country.Region == &quot;US&quot;)
+covidUS</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="there-are-2382-rows-and-8-columns." class="section level4">
+<h4>There are 2382 rows and 8 columns.</h4>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuWmlwR2VvZ3JhcGh5XG5gYGAifQ== -->
+<pre class="r"><code>ZipGeography</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="zipgeography-will-be-used-to-help-draw-map." class="section level4">
+<h4>ZipGeography will be used to help draw map.</h4>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGRhdGEgPSBjb3ZpZFVTLCBhZXMoeCA9IFByb3ZpbmNlLlN0YXRlLCB5ID0gQ29uZmlybWVkKSkgK1xuICBnZW9tX3BvaW50KCkgICtcbiAgbGFicyh0aXRsZSA9IFwiXCIpXG5gYGAifQ== -->
+<pre class="r"><code>ggplot(data = covidUS, aes(x = Province.State, y = Confirmed)) +
+  geom_point()  +
+  labs(title = &quot;&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="the-graph-shows-there-is-one-state-with-considerable-confirmed-and-several-states-with-intermediate-number-of-confirmed-and-other-state-with-small-number-of-confirmed" class="section level4">
+<h4>The graph shows there is one state with considerable confirmed and several states with intermediate number of confirmed and other state with small number of confirmed</h4>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD ``` =======</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>4655269fc97534d0bb6d3bef7566e52d77461811</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<!-- rnb-text-end -->
+</div>
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUHJlbGltaW5hcnkgRURBIgphdXRob3I6IFpvZXkgWWUsIENoYW55b25nIFNvbmcsIFppZmVpIFpoZW5nCmRhdGU6IDQvNS8yMDIwCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiogR3VpZGluZyBRdWVzdGlvbiA6IFdoYXQgaXMgdGhlIGNvcnJlbGF0aW9uIGJldHdlZW4gZGFpbHkgZGVhdGggYW5kIHJlY292ZXIgaW4gdGhlIFUuUy4gPwoKKiBEYXRhIHNvdXJjZXM6IApXZSBmb3VuZCBDT1ZJRC0xOSBkYXRhIHNvdXJjZSBmcm9tIGthZ2dsZS4gVGhlIGRhdGEgaXMgY29sbGVjdGVkIGJ5IFdvcmxkIEhlYWx0aCBPcmdhbml6YXRpb24uIFNpbmNlIGl0IGlzIGEgbmV3IHJlc3BpcmF0b3J5IHZpcnVzIHRoYXQgcGVvcGxlIGRvIG5vdCBrbm93IGhvdyBpdCBhZmZlY3RzIHBlb3BsZSwgdGhlIGRhdGEgaXMgY29sbGVjdGVkIGFuZCBtYWRlIGF2YWlsYWJsZSB0byB0aGUgYnJvYWRlciBkYXRhIHNjaWVuY2UgY29tbXVuaXR5IGluIG9yZGVyIHRvIGdhdGhlciBzb21lIGludGVyZXN0aW5nIGluc2lnaHRzLiBUaGUgZGF0YSBzdGFydGVkIGZyb20gMS8yMi8yMDIwLCBhbmQgY3VycmVudGx5IGhhdmUgMTE5MzAgY2FzZXMgdGhhdCByZXByZXNlbnQgdGhlIG51bWJlciBvZiBDb3ZpZCAyMDE5IHBhdGllbnQgaW4gZWFjaCBzdGF0ZSBkYWlseS4gV2UgcGxhbiB0byB1c2UgIkRhdGUiLCJTdGF0ZSIsIkNvdW50cnkiLCJDb25maXJtZWQiLCJEZWF0aHMiLGFuZCAiUmVjb3ZlcmVkIiBmcm9tIHRoaXMgZGF0YSBmcmFtZS4KCldlIGZvdW5kIENPVklELTE5IGluIFVTQSBkYXRhIHNvdXJjZSBmcm9tIGthZ2dsZSBhcyB3ZWxsLiBUaGUgZGF0YSBpcyBvYnRhaW5lZCBmcm9tIENPVklELTE5IFRyYWNraW5nIHByb2plY3QuIFRoZSBkYXRhIGZvY3VzIG1haW5seSBvbiB0aGUgVS5TLiBhbmQgcHJvdmlkZXMgZGV0YWlscyByZWdhcmRpbmcgNTAgc3RhdGVzIGFuZCB0aGUgRGlzdHJpY3Qgb2YgQ29sdW1iaWEgYXQgZGFpbHkgbGV2ZWwuIEVhY2ggY2FzZSByZXByZXNlbnRzIHRoZSBudW1iZXIgb2YgQ09WSUQgMjAxOSBwYXRpZW50cyBpbiBlYWNoIHN0YXRlIGluIHRoZSBVUyBkYWlseS4gVGhlIGRhdGEgc3RhcnRlZCBmcm9tIDMvNC8yMDIwIGFuZCBjdXJyZW50bHkgaGF2ZSAxODIxIGNhc2VzLiBXZSBwbGFuIHRvIHVzZSAiRGF0ZSIsInN0YXRlIiwiUG9zaXRpdmUiLCJ0b3RhbCIsYW5kICJkZWF0aEluY3JlYXNlIi4KCldlIGFsc28gZm91bmQgWmlwR2VvZ3JhcGh5IGRhdGEgZnJvbSBEYXRhQ29tcHV0aW5nIHBhY2thZ2UuIEl0IGhhcyA0Mjc0MSBjYXNlcyBhbmQgZWFjaCBjYXNlIHJlcHJlc2VudHMgSW5mb3JtYXRpb24gYWJvdXQgdGhlIGxvY2F0aW9uLCBhcmVhLCBhbmQgaG91c2luZyB1bml0cyBpbiBlYWNoIFpJUCBjb2RlIGFyZWEuIFdlIHBsYW4gdG8gdXNlIHNvbWUgdnJhaWJsZXMgc3VjaCBhcyAiU3RhdGUiLCJQb3B1bGF0aW9uIiwgYW5kICJDb3VudHkiLgoKCiogVHdvIGRhdGEgc291cmNlcwpgYGB7cn0KCmBgYA==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUHJlbGltaW5hcnkgRURBIgphdXRob3I6IFpvZXkgWWUsIENoYW55b25nIFNvbmcsIFppZmVpIFpoZW5nCmRhdGU6IDQvNS8yMDIwCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMjIEZyb250IE1hdHRlcgoKYGBge3J9IAojIGNsZWFuIHVwIHRoZSBSU3R1ZGlvIGVudmlyb25tZW50IApybShsaXN0ID0gbHMoKSkKIyBsb2FkIGFsbCBwYWNrYWdlcyBoZXJlOiBgbW9zYWljYCwgYHRpZHl2ZXJzZWAsIGBsdWJyaWRhdGVgLCBhbmQgYWxsIG90aGVycyB1c2VkCmxpYnJhcnkobW9zYWljKQpsaWJyYXJ5KHRpZHl2ZXJzZSkKbGlicmFyeShsdWJyaWRhdGUpCmxpYnJhcnkoZ2dwbG90MikKbGlicmFyeShEYXRhQ29tcHV0aW5nKQpgYGAKCiogR3VpZGluZyBRdWVzdGlvbiA6IFdoYXQgaXMgdGhlIGNvcnJlbGF0aW9uIGJldHdlZW4gZGFpbHkgZGVhdGggYW5kIHJlY292ZXIgaW4gZGlmZmVyZW50IHN0YXRlcyBvZiB0aGUgVS5TLiA/CgoqIERhdGEgc291cmNlczogCldlIGZvdW5kIENPVklELTE5IGRhdGEgc291cmNlIGZyb20ga2FnZ2xlLiBUaGUgZGF0YSBpcyBjb2xsZWN0ZWQgYnkgV29ybGQgSGVhbHRoIE9yZ2FuaXphdGlvbi4gU2luY2UgaXQgaXMgYSBuZXcgcmVzcGlyYXRvcnkgdmlydXMgdGhhdCBwZW9wbGUgZG8gbm90IGtub3cgaG93IGl0IGFmZmVjdHMgcGVvcGxlLCB0aGUgZGF0YSBpcyBjb2xsZWN0ZWQgYW5kIG1hZGUgYXZhaWxhYmxlIHRvIHRoZSBicm9hZGVyIGRhdGEgc2NpZW5jZSBjb21tdW5pdHkgaW4gb3JkZXIgdG8gZ2F0aGVyIHNvbWUgaW50ZXJlc3RpbmcgaW5zaWdodHMuIFRoZSBkYXRhIHN0YXJ0ZWQgZnJvbSAxLzIyLzIwMjAsIGFuZCBjdXJyZW50bHkgaGF2ZSAxMTkzMCBjYXNlcyB0aGF0IHJlcHJlc2VudCB0aGUgbnVtYmVyIG9mIENvdmlkIDIwMTkgcGF0aWVudCBpbiBlYWNoIHN0YXRlIGRhaWx5LiBXZSBwbGFuIHRvIHVzZSAiRGF0ZSIsIlN0YXRlIiwiQ291bnRyeSIsIkNvbmZpcm1lZCIsIkRlYXRocyIsYW5kICJSZWNvdmVyZWQiIGZyb20gdGhpcyBkYXRhIGZyYW1lLiBXZSBmb3VuZCBDT1ZJRC0xOSBpbiBVU0EgZGF0YSBzb3VyY2UgZnJvbSBrYWdnbGUgYXMgd2VsbC4gVGhlIGRhdGEgaXMgb2J0YWluZWQgZnJvbSBDT1ZJRC0xOSBUcmFja2luZyBwcm9qZWN0LiBUaGUgZGF0YSBmb2N1cyBtYWlubHkgb24gdGhlIFUuUy4gYW5kIHByb3ZpZGVzIGRldGFpbHMgcmVnYXJkaW5nIDUwIHN0YXRlcyBhbmQgdGhlIERpc3RyaWN0IG9mIENvbHVtYmlhIGF0IGRhaWx5IGxldmVsLiBFYWNoIGNhc2UgcmVwcmVzZW50cyB0aGUgbnVtYmVyIG9mIENPVklEIDIwMTkgcGF0aWVudHMgaW4gZWFjaCBzdGF0ZSBpbiB0aGUgVVMgZGFpbHkuIFRoZSBkYXRhIHN0YXJ0ZWQgZnJvbSAzLzQvMjAyMCBhbmQgY3VycmVudGx5IGhhdmUgMTgyMSBjYXNlcy4gV2UgcGxhbiB0byB1c2UgIkRhdGUiLCJzdGF0ZSIsIlBvc2l0aXZlIiwidG90YWwiLGFuZCAiZGVhdGhJbmNyZWFzZSIuIFdlIGFsc28gZm91bmQgWmlwR2VvZ3JhcGh5IGRhdGEgZnJvbSBEYXRhQ29tcHV0aW5nIHBhY2thZ2UuIEl0IGhhcyA0Mjc0MSBjYXNlcyBhbmQgZWFjaCBjYXNlIHJlcHJlc2VudHMgSW5mb3JtYXRpb24gYWJvdXQgdGhlIGxvY2F0aW9uLCBhcmVhLCBhbmQgaG91c2luZyB1bml0cyBpbiBlYWNoIFpJUCBjb2RlIGFyZWEuIFdlIHBsYW4gdG8gdXNlIHNvbWUgdnJhaWJsZXMgc3VjaCBhcyAiU3RhdGUiLCJQb3B1bGF0aW9uIiwgYW5kICJDb3VudHkiLgoKCiogVHdvIGRhdGEgc291cmNlcwpgYGB7cn0KY292aWQgPC0KICByZWFkLmNzdignY292aWRfMTlfZGF0YS5jc3YnKQpjb3ZpZFVTIDwtCiAgY292aWQgJT4lCiAgZmlsdGVyKENvdW50cnkuUmVnaW9uID09ICJVUyIpCmNvdmlkVVMKYGBgCiMjIyMgVGhlcmUgYXJlIDIzODIgcm93cyBhbmQgOCBjb2x1bW5zLgpgYGB7cn0KWmlwR2VvZ3JhcGh5CmBgYAojIyMjIFppcEdlb2dyYXBoeSB3aWxsIGJlIHVzZWQgdG8gaGVscCBkcmF3IG1hcC4KCgoKYGBge3J9CmdncGxvdChkYXRhID0gY292aWRVUywgYWVzKHggPSBQcm92aW5jZS5TdGF0ZSwgeSA9IENvbmZpcm1lZCkpICsKICBnZW9tX3BvaW50KCkgICsKICBsYWJzKHRpdGxlID0gIiIpCmBgYAojIyMjIFRoZSBncmFwaCBzaG93cyB0aGVyZSBpcyBvbmUgc3RhdGUgd2l0aCBjb25zaWRlcmFibGUgY29uZmlybWVkIGFuZCBzZXZlcmFsIHN0YXRlcyB3aXRoIGludGVybWVkaWF0ZSBudW1iZXIgb2YgY29uZmlybWVkIGFuZCBvdGhlciBzdGF0ZSB3aXRoIHNtYWxsIG51bWJlciBvZiBjb25maXJtZWQgCgoKCjw8PDw8PDwgSEVBRApgYGAKPT09PT09PQoKPj4+Pj4+PiA0NjU1MjY5ZmM5NzUzNGQwYmI2ZDNiZWY3NTY2ZTUyZDc3NDYxODExCg==</div>
 
 
 

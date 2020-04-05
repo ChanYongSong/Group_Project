@@ -5,17 +5,53 @@ date: 4/5/2020
 output: html_notebook
 ---
 
-* Guiding Question : What is the correlation between daily death and recover in the U.S. ?
+## Front Matter
+
+```{r} 
+# clean up the RStudio environment 
+rm(list = ls())
+# load all packages here: `mosaic`, `tidyverse`, `lubridate`, and all others used
+library(mosaic)
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(DataComputing)
+```
+
+* Guiding Question : What is the correlation between daily death and recover in different states of the U.S. ?
 
 * Data sources: 
-We found COVID-19 data source from kaggle. The data is collected by World Health Organization. Since it is a new respiratory virus that people do not know how it affects people, the data is collected and made available to the broader data science community in order to gather some interesting insights. The data started from 1/22/2020, and currently have 11930 cases that represent the number of Covid 2019 patient in each state daily. We plan to use "Date","State","Country","Confirmed","Deaths",and "Recovered" from this data frame.
-
-We found COVID-19 in USA data source from kaggle as well. The data is obtained from COVID-19 Tracking project. The data focus mainly on the U.S. and provides details regarding 50 states and the District of Columbia at daily level. Each case represents the number of COVID 2019 patients in each state in the US daily. The data started from 3/4/2020 and currently have 1821 cases. We plan to use "Date","state","Positive","total",and "deathIncrease".
-
-We also found ZipGeography data from DataComputing package. It has 42741 cases and each case represents Information about the location, area, and housing units in each ZIP code area. We plan to use some vraibles such as "State","Population", and "County".
+We found COVID-19 data source from kaggle. The data is collected by World Health Organization. Since it is a new respiratory virus that people do not know how it affects people, the data is collected and made available to the broader data science community in order to gather some interesting insights. The data started from 1/22/2020, and currently have 11930 cases that represent the number of Covid 2019 patient in each state daily. We plan to use "Date","State","Country","Confirmed","Deaths",and "Recovered" from this data frame. We found COVID-19 in USA data source from kaggle as well. The data is obtained from COVID-19 Tracking project. The data focus mainly on the U.S. and provides details regarding 50 states and the District of Columbia at daily level. Each case represents the number of COVID 2019 patients in each state in the US daily. The data started from 3/4/2020 and currently have 1821 cases. We plan to use "Date","state","Positive","total",and "deathIncrease". We also found ZipGeography data from DataComputing package. It has 42741 cases and each case represents Information about the location, area, and housing units in each ZIP code area. We plan to use some vraibles such as "State","Population", and "County".
 
 
 * Two data sources
 ```{r}
-
+covid <-
+  read.csv('covid_19_data.csv')
+covidUS <-
+  covid %>%
+  filter(Country.Region == "US")
+covidUS
 ```
+#### There are 2382 rows and 8 columns.
+```{r}
+ZipGeography
+```
+#### ZipGeography will be used to help draw map.
+
+
+
+```{r}
+ggplot(data = covidUS, aes(x = Province.State, y = Confirmed)) +
+  geom_point()  +
+  labs(title = "")
+```
+#### The graph shows there is one state with considerable confirmed and several states with intermediate number of confirmed and other state with small number of confirmed 
+
+
+
+<<<<<<< HEAD
+```
+=======
+
+>>>>>>> 4655269fc97534d0bb6d3bef7566e52d77461811
