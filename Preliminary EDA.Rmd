@@ -1,0 +1,14 @@
+---
+title: "Preliminary EDA"
+author: Zoey Ye, Chanyong Song, Zifei Zheng
+date: 4/5/2020
+output: html_notebook
+---
+
+* Guiding Question : What is the correlation between daily death and recover in the U.S. ?
+
+* Data sources: We found COVID-19 data sources from kaggle. The data is collected by World Health Organization. Since it is a new respiratory virus that people do not know how it affects people, the data is collected and made available to the broader data science community in order to gather some interesting insights. The data started from 1/22/2020, and currently have 11930 cases that represent the number of Covid 2019 patient in each state daily. We plan to use "Date","State","Country","Confirmed","Deaths",and "Recovered" from this data frame.
+
+* Two data sources
+```{r}
+```
