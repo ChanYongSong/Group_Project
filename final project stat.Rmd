@@ -1,0 +1,136 @@
+---
+title: "STAT 184 final project"
+author: Zoey Ye, Chanyong Song, Zifei Zheng
+date: 4/20/2020
+output: html_notebook
+---
+
+## Front Matter
+
+```{r} 
+# clean up the RStudio environment 
+rm(list = ls())
+# load all packages here: `mosaic`, `tidyverse`, `lubridate`, and all others used
+library(mosaic)
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(DataComputing)
+```
+
+* Guiding Question : What is the top 10 country in recovery rate and 10 countries with lowest recovery rate?
+
+* Data sources: 
+We found COVID-19 data source from kaggle. The data is collected by World Health Organization. Since it is a new respiratory virus that people do not know how it affects people, the data is collected and made available to the broader data science community in order to gather some interesting insights. The data started from 1/22/2020, and currently have 11930 cases that represent the number of Covid 2019 patient in each state daily. We plan to use "Date","State","Country","Confirmed","Deaths",and "Recovered" from this data frame.
+We also found ZipGeography data from DataComputing package. It has 42741 cases and each case represents Information about the location, area, and housing units in each ZIP code area. We plan to use some vraibles such as "State","Population", and "County".
+
+
+* Two data sources
+```{r}
+covid <-
+  read.csv('covid_19_data.csv')
+covidUS <-
+  covid %>%
+  filter(Country.Region == "US")
+covidUS
+```
+#### There are 3369 rows and 8 columns.
+```{r}
+Top10States <-
+  covidUS %>%
+  filter(ObservationDate == '04/21/2020') %>%
+  group_by(Province.State) %>%
+  summarise(confirmed = sum(Confirmed)) %>%
+  arrange(desc(confirmed)) %>%
+  head(10) %>%
+  rename(State = Province.State)
+Top10States
+```
+
+### World Recovery Rate in Countries.
+
+```{r}
+dim(covid) # shape
+```
+```{r}
+names(covid) # columns
+```
+
+```{r}
+max(covid$Deaths) # most death
+```
+```{r}
+max(covid$Recovered) # most recover
+```
+```{r}
+max(covid$Confirmed) # most affected
+```
+```{r}
+covid  %>% 
+  group_by(ObservationDate)  %>% 
+  summarize(total_count = max(Confirmed))
+```
+
+```{r}
+covidtotal <-
+  covid  %>%
+  filter(ObservationDate %in%
+           '04/21/2020')
+dim(covidtotal)
+```
+```{r}
+covid_country <- covidtotal  %>% 
+group_by(`Country.Region`)  %>% 
+summarize(total_death = sum(Deaths),
+         total_recovered = sum(Recovered),
+         total_confirmed = sum(Confirmed))  %>% 
+mutate(recovery_rate = round(total_recovered / total_confirmed,2))
+```
+
+```{r}
+covid_country  %>% 
+  filter(!grepl("Others", Country.Region, ignore.case = TRUE))  %>% 
+  arrange(desc(total_confirmed))  %>% 
+  head(11)  %>% 
+  ggplot() + geom_bar(aes(`Country.Region`, total_confirmed), stat = "identity") +
+  geom_label(aes(`Country.Region`, total_confirmed, label = total_confirmed)) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title =  "Top Countries by Total Confirmed Cases",
+      caption = "Data Source: Kaggle")
+```
+
+```{r}
+covid_country  %>% 
+  filter(!grepl("Others", Country.Region, ignore.case = TRUE))  %>% 
+  filter(total_confirmed >= 10000) %>%
+  arrange(desc(recovery_rate))  %>% 
+  head(11)  %>% 
+  ggplot() + geom_bar(aes(`Country.Region`, recovery_rate), stat = "identity") +
+  geom_label(aes(`Country.Region`, recovery_rate, label = recovery_rate)) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title =  "Top Countries by Total Confirmed Cases",
+      caption = "Data Source: Kaggle")
+```
+
+```{r}
+covid_country  %>% 
+  filter(!grepl("Others", Country.Region, ignore.case = TRUE))  %>% 
+  filter(total_confirmed >= 10000) %>%
+  filter(recovery_rate != 0) %>%
+  arrange(recovery_rate)  %>% 
+  head(11)  %>% 
+  ggplot() + geom_bar(aes(`Country.Region`, recovery_rate), stat = "identity") +
+  geom_label(aes(`Country.Region`, recovery_rate, label = recovery_rate)) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title =  "Top Countries by Total Confirmed Cases",
+      caption = "Data Source: Kaggle")
+```
+```{r}
+covid_country %>%
+  WorldMap(key = "Country.Region",fill = "recovery_rate")
+```
+
+
