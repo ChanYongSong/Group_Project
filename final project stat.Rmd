@@ -78,6 +78,9 @@ covidtotal <-
            '04/21/2020')
 dim(covidtotal)
 ```
+
+
+
 ```{r}
 covid_country <- covidtotal  %>% 
 group_by(`Country.Region`)  %>% 
@@ -133,4 +136,36 @@ covid_country %>%
   WorldMap(key = "Country.Region",fill = "recovery_rate")
 ```
 
+### Using spread.
+```{r}
+spread_covid <- covidtotal  %>% 
+  group_by(`Country.Region`)  %>% 
+  summarize(total_recovered = sum(Recovered),
+            total_confirmed = sum(Confirmed),
+            recovery_rate = total_recovered/total_confirmed)
+
+spread_covid <-
+  spread_covid %>%
+  gather("total_recovered","total_confirmed","recovery_rate", key = "type", value = 'value') %>%
+  mutate_at(vars(value),funs(round(., 3)))
+
+ordered.spread_covid <- spread_covid[order(spread_covid$Country.Region),] 
+
+head(ordered.spread_covid,30)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
 
